@@ -1,27 +1,22 @@
 
-int sensorPin = A7;    // select the input pin for the potentiometer
-int sensorOn = 3;
-int ledPin = 13;      // select the pin for the LED
-int button = A6;
-//int irOn = 3;
-int irPin = 2; //int-0
-int m_r = 9;
-int m_l =10;
-int sensorValue = 0;  // variable to store the value coming from the sensor<
-int irData = 0;
+int sensorPin = A7;		// input pin for the potentiometer
+int sensorOn = 3;		// power +5V for potentiometr and ir LED and ir sensor witch amplifier 
+int ledPin = 13;		// select the pin for the LED
+int button = A6;		// input pin for jumper switch
+int irPin = 2;			// int-0 interrupt from sensor amplifier
+int m_r = 9;			// PWM motor right rotate
+int m_l =10;			// PWM motor left rotate
+int sensorValue = 0;	// variable to store the value coming from the sensor<
 unsigned long t = 0,t1 = 0;
-unsigned long rotate = 0;
+unsigned long rotate = 0;	// sensor have 4 window in sensor disk, one rotate = 4 signals
 
 void setup() {
-  // declare the ledPin as an OUTPUT:
   pinMode(ledPin, OUTPUT);
   pinMode(sensorOn, OUTPUT);
   pinMode(sensorPin, INPUT);
   pinMode(button, INPUT_PULLUP);
-  //pinMode(irOn, OUTPUT);
   pinMode(irPin, INPUT);
   digitalWrite(sensorOn, HIGH);
-  //digitalWrite(irOn, HIGH);
   Serial.begin(9600);
   rotate = 0;
   attachInterrupt(0,rpm,RISING);
@@ -35,24 +30,11 @@ void rpm(){
 void loop() {
   t = millis();
   sensorValue = analogRead(sensorPin);
-  //irData = digitalRead(irPin);
-  //if(irData) {rotate+=1;}
   
-  if(t-t1>=1000){
+  if(t-t1>=1000){		//every each second
     t1=t;
-    Serial.println((rotate/4)*60);
-    rotate=0;
+    Serial.println((rotate/4)*60);	// calculate rotates per minuts (RPM) and print
+    rotate=0; 						// drop window counter
   }
   
-  
-/*
-  if (button){
-    
-  } 
-*/
-  
-  //Serial.println (sensorValue);
-  //Serial.println (digitalRead(button));
-  //Serial.println (irData);
-  //delay(10);
-}
+} // main
