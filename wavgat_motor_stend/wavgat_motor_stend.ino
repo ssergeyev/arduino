@@ -12,8 +12,8 @@ unsigned long rotate = 0;	// sensor have 4 window in sensor disk, one rotate = 4
 
 void setup() {
   // Пины D9 и D10 - 31.4 кГц
-  TCCR1A = 0b00000001;  // 8bit
-  TCCR1B = 0b00000001;  // x1 phase correct
+  //TCCR1A = 0b00000001;  // 8bit
+  //TCCR1B = 0b00000001;  // x1 phase correct
   pinMode(ledPin, OUTPUT);
   pinMode(sensorOn, OUTPUT);
   pinMode(sensorPin, INPUT);
@@ -45,10 +45,17 @@ void loop() {
   if(t-t2>=100){
     t2=t;
     sensorValue=analogRead(sensorPin);
-    sensorValue=map(sensorValue,0,4080,255,0);    //for LGT8F32P
-    //sensorValue=map(sensorValue,0,1023,255,0);    //for Atmega328p
-    Serial.println(sensorValue);
-    analogWrite(10,sensorValue);
+    //sensorValue=map(sensorValue,0,4080,255,0);    //for LGT8F32P
+    if (sensorValue<500){
+      sensorValue=map(sensorValue,0,512,255,0);    //for Atmega328p
+      analogWrite(10,sensorValue);
+    }
+    if (sensorValue>524){
+      sensorValue=map(sensorValue,512,1023,0,255);    //for Atmega328p
+      analogWrite(9,sensorValue);
+    }
+    //Serial.println(sensorValue);
+    
   }
   
 } // main
